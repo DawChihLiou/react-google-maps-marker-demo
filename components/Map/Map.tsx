@@ -14,7 +14,6 @@ interface MapProps extends google.maps.MapOptions {
   className: string;
   onClick?: (e: google.maps.MapMouseEvent) => void;
   onIdle?: (map: google.maps.Map) => void;
-  onMapLoaded?: (map: google.maps.Map) => void;
   children?: ReactNode;
 }
 
@@ -22,7 +21,6 @@ export default function Map({
   className,
   onClick,
   onIdle,
-  onMapLoaded,
   children,
   ...options
 }: MapProps) {
@@ -35,9 +33,8 @@ export default function Map({
         styles: mapStyle,
       });
       setMap(googleMap);
-      onMapLoaded?.(googleMap);
     }
-  }, [ref, map, onMapLoaded]);
+  }, [ref, map]);
 
   useDeepCompareEffectForMaps(() => {
     if (map) {

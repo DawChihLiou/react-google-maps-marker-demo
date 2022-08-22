@@ -1,34 +1,39 @@
-import { forwardRef, PropsWithChildren, useEffect, useMemo } from "react";
+import { PropsWithChildren, useEffect, useMemo } from "react";
 import Portal from "../Portal";
-import { Overlay } from "./Overlay";
+import { createOverlay } from "./Overlay";
 
 type OverlayProps = PropsWithChildren<{
   position: google.maps.LatLng | google.maps.LatLngLiteral;
   pane?: keyof google.maps.MapPanes;
   map: google.maps.Map;
+  zIndex?: number;
 }>;
 
-const OverlayView = forwardRef<HTMLDivElement, OverlayProps>(
-  ({ position, pane = "floatPane", map, children }, ref) => {
-    const container = useMemo(() => {
-      const div = document.createElement("div");
-      div.style.position = "absolute";
-      return div;
-    }, []);
+export default function OverlayView({
+  position,
+  pane = "floatPane",
+  map,
+  zIndex,
+  children,
+}: OverlayProps) {
+  const container = useMemo(() => {
+    const div = document.createElement("div");
+    div.style.position = "absolute";
+    return div;
+  }, []);
 
-    const overlay = useMemo(() => {
-      return new Overlay(container, pane, position);
-    }, [container, pane, position]);
+  const overlay = useMemo(() => {
+    return createOverlay(container, pane, position);
+  }, [container, pane, position]);
 
-    useEffect(() => {
-      overlay.setMap(map);
-      return () => overlay.setMap(null);
-    }, [map, overlay]);
+  useEffect(() => {
+    overlay?.setMap(map);
+    return () => overlay?.setMap(null);
+  }, [map, overlay]);
 
-    return <Portal container={container}>{children}</Portal>;
-  }
-);
+  useEffect(() => {
+    container.style.zIndex = `${zIndex}`;
+  }, [zIndex, container]);
 
-OverlayView.displayName = "OverlayView";
-
-export default OverlayView;
+  return <Portal container={container}>{children}</Portal>;
+}

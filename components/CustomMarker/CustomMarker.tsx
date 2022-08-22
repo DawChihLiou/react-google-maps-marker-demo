@@ -1,30 +1,55 @@
-import dynamic from "next/dynamic";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { Hotel } from "../../types/hotel";
-
-const DynamicOverlayView = dynamic(() => import("../OverlayView"), {
-  suspense: true,
-});
+import OverlayView from "../OverlayView";
+import { motion } from "framer-motion";
 
 interface CustomMarkerProps {
   hotel: Hotel;
-  map: google.maps.Map;
+  map?: google.maps.Map;
+  onClick: (payload: Hotel) => void;
+  highlight?: boolean;
 }
 
-export default function CustomMarker({ hotel, map }: CustomMarkerProps) {
+export default function CustomMarker({
+  hotel,
+  map,
+  onClick,
+  highlight,
+}: CustomMarkerProps) {
   const price = useMemo(() => {
     return hotel.ratesSummary.minPrice.replace(/\.(.*?\d*)/g, "");
   }, [hotel]);
 
+  const handleClick = useCallback(() => {
+    onClick(hotel);
+  }, [onClick, hotel]);
+
   return (
-    <DynamicOverlayView
-      position={{
-        lat: hotel.location.latitude as number,
-        lng: hotel.location.longitude as number,
-      }}
-      map={map}
-    >
-      <div className="rounded-full bg-slate-400 py-1 px-1.5 drop-shadow text-xxs text-white">{`$ ${price}`}</div>
-    </DynamicOverlayView>
+    <>
+      {map && (
+        <OverlayView
+          position={{
+            lat: hotel.location.latitude as number,
+            lng: hotel.location.longitude as number,
+          }}
+          map={map}
+          zIndex={highlight ? 99 : 0}
+        >
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <button
+              className={`rounded-full bg-zinc-600 py-1 px-1.5 drop-shadow text-xxs text-white ${
+                highlight &&
+                "text-black bg-zinc-50 font-bold text-xs py-1.5 px-2"
+              }`}
+              onClick={handleClick}
+            >{`$ ${price}`}</button>
+          </motion.div>
+        </OverlayView>
+      )}
+    </>
   );
 }

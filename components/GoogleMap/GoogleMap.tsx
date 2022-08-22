@@ -1,12 +1,8 @@
 import { Status, Wrapper } from "@googlemaps/react-wrapper";
-import dynamic from "next/dynamic";
-import { Suspense, useMemo, useState } from "react";
+import { useMemo } from "react";
 import { Hotel } from "../../types/hotel";
 import Map from "../Map";
-
-const DynamicMarker = dynamic(() => import("../CustomMarker"), {
-  suspense: true,
-});
+import Marker from "../CustomMarker";
 
 const render = (status: Status) => {
   if (status === Status.FAILURE) {
@@ -18,11 +14,12 @@ const render = (status: Status) => {
 interface GoogleMapProps {
   onIdle?: (map: google.maps.Map) => void;
   onClick?: (e: google.maps.MapMouseEvent) => void;
-  onMarkerClick?: (payload: Hotel) => void;
+  onMarkerClick: (payload: Hotel) => void;
   markers?: Hotel[];
   center: google.maps.LatLngLiteral;
   zoom: number;
   apiKey: string;
+  highlightedMarkerId?: string;
 }
 
 export default function GoogleMap({
@@ -32,8 +29,9 @@ export default function GoogleMap({
   zoom,
   center,
   markers,
+  onMarkerClick,
+  highlightedMarkerId,
 }: GoogleMapProps) {
-  const [map, setMap] = useState<google.maps.Map>();
   const filtered = useMemo(() => {
     return markers?.filter((m) => m.location.latitude && m.location.longitude);
   }, [markers]);
@@ -49,22 +47,19 @@ export default function GoogleMap({
           maxZoom={18}
           onIdle={onIdle}
           onClick={onClick}
-          onMapLoaded={setMap}
           fullscreenControl={false}
           streetViewControl={false}
           mapTypeControl={false}
           zoomControl={false}
         >
-          <Suspense>
-            {map &&
-              filtered?.map((hotel) => (
-                <DynamicMarker
-                  key={hotel.hotelId || hotel.pclnId}
-                  hotel={hotel}
-                  map={map}
-                />
-              ))}
-          </Suspense>
+          {filtered?.map((hotel) => (
+            <Marker
+              key={hotel.hotelId || hotel.pclnId}
+              hotel={hotel}
+              onClick={onMarkerClick}
+              highlight={hotel.hotelId === highlightedMarkerId}
+            />
+          ))}
         </Map>
       </Wrapper>
     </div>

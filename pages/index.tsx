@@ -1,9 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import type { NextPage } from "next";
 import Head from "next/head";
-import { useState } from "react";
+import { useCallback, useState } from "react";
+import Card from "../components/Card";
 import GoogleMap from "../components/GoogleMap";
 import { fetchHotels, FetchHotelsResponse } from "../services/fetchHotels";
+import { Hotel } from "../types/hotel";
 
 const query = () =>
   fetchHotels({
@@ -34,6 +36,19 @@ const Home: NextPage = () => {
     }
   };
 
+  const [highlightedHotel, setHighlightedHotel] = useState<Hotel | null>(null);
+
+  const onMarkerClick = useCallback(
+    (payload: Hotel) => {
+      if (highlightedHotel === payload) {
+        setHighlightedHotel(null);
+      } else {
+        setHighlightedHotel(payload);
+      }
+    },
+    [highlightedHotel]
+  );
+
   return (
     <div>
       <Head>
@@ -50,7 +65,19 @@ const Home: NextPage = () => {
             zoom={zoom}
             markers={data?.hotels}
             onIdle={onIdle}
+            onMarkerClick={onMarkerClick}
+            highlightedMarkerId={highlightedHotel?.hotelId}
           />
+        </div>
+        <div>
+          {highlightedHotel && (
+            <Card
+              name={highlightedHotel.name}
+              stars={highlightedHotel.starRating}
+              imgUrl={highlightedHotel.thumbnailUrl}
+              address={`${highlightedHotel.location.address.addressLine1}, ${highlightedHotel.location.address.cityName}`}
+            />
+          )}
         </div>
       </main>
     </div>

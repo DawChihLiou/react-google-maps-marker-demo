@@ -5,7 +5,7 @@ interface CardProps {
   name: string;
   address: string;
   stars: number;
-  url: string;
+  url?: string;
   imgUrl: string;
 }
 
@@ -24,10 +24,18 @@ export default function Card({ name, address, stars, url, imgUrl }: CardProps) {
           </p>
         </div>
         <div className="grow">
-          <h1 className="text-sky-400">
-            <a href={url} target="_blank" rel="noreferrer">
-              {name}
-            </a>
+          <h1 className="font-bold">
+            {url && (
+              <a
+                href={url}
+                className="text-sky-400"
+                target="_blank"
+                rel="noreferrer"
+              >
+                {name}
+              </a>
+            )}
+            {!url && name}
           </h1>
           <p className="text-sm">{address}</p>
           <div className="flex items-center gap-1 text-sm text-amber-400">
