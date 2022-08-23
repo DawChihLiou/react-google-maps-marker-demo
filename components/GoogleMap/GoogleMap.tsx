@@ -51,6 +51,7 @@ export default function GoogleMap({
           streetViewControl={false}
           mapTypeControl={false}
           zoomControl={false}
+          clickableIcons={false}
         >
           {filtered?.map((hotel) => (
             <Marker

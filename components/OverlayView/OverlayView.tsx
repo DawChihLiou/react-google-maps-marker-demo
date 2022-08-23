@@ -1,5 +1,5 @@
 import { PropsWithChildren, useEffect, useMemo } from "react";
-import Portal from "../Portal";
+import { createPortal } from "react-dom";
 import { createOverlay } from "./Overlay";
 
 type OverlayProps = PropsWithChildren<{
@@ -35,5 +35,5 @@ export default function OverlayView({
     container.style.zIndex = `${zIndex}`;
   }, [zIndex, container]);
 
-  return <Portal container={container}>{children}</Portal>;
+  return createPortal(children, container);
 }

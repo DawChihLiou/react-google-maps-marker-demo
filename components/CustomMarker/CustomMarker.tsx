@@ -41,9 +41,8 @@ export default function CustomMarker({
             exit={{ opacity: 0 }}
           >
             <button
-              className={`rounded-full bg-zinc-600 py-1 px-1.5 drop-shadow text-xxs text-white ${
-                highlight &&
-                "text-black bg-zinc-50 font-bold text-xs py-1.5 px-2"
+              className={`rounded-full bg-zinc-600 py-1.5 px-2 drop-shadow text-xs text-white ${
+                highlight && "text-black bg-zinc-50 font-bold py-2 px-2.5"
               }`}
               onClick={handleClick}
             >{`$ ${price}`}</button>

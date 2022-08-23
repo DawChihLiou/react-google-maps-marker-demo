@@ -96,11 +96,28 @@ const style = [
     ],
   },
   {
+    featureType: "poi.business",
+    stylers: [
+      {
+        visibility: "off",
+      },
+    ],
+  },
+  {
     featureType: "poi.park",
     elementType: "geometry.fill",
     stylers: [
       {
         color: "#023e58",
+      },
+    ],
+  },
+  {
+    featureType: "poi.park",
+    elementType: "labels.text",
+    stylers: [
+      {
+        visibility: "off",
       },
     ],
   },
