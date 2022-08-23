@@ -33,12 +33,6 @@ export function createOverlay(
       }
 
       this.container.style.transform = `translate(${point.x}px, ${point.y}px)`;
-
-      const pane = this.getPanes()?.[this.pane];
-
-      if (!pane?.contains(this.container)) {
-        pane?.appendChild(this.container);
-      }
     }
 
     onRemove(): void {
