@@ -37,8 +37,13 @@ export default function CustomMarker({
         >
           <motion.div
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
+            animate={{ opacity: 1, transition: { delay: Math.random() * 0.3 } }}
             exit={{ opacity: 0 }}
+            transition={{
+              type: "spring",
+              stiffness: 400,
+              damping: 20,
+            }}
           >
             <button
               className={`rounded-full bg-zinc-600 py-1.5 px-2 drop-shadow text-xs text-white ${
