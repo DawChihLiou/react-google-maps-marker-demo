@@ -1,4 +1,8 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# React Google Maps Marker Demo
+
+![demo](https://user-images.githubusercontent.com/4335023/186158980-5786154d-bbbd-45c6-8e20-f1de7232b9dd.gif)
+
+This repository is the codebase for the article **[Building A Custom Google Maps Marker React Component Like Airbnb in Next.js](https://dawchihliou.github.io/articles/building-custom-google-maps-marker-react-component-like-airbnb-in-nextjs)** on my website. It's a demonstration of how you can create a custom Google Maps marker using any React component.
 
 ## Getting Started
 
